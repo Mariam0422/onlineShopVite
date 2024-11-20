@@ -18,8 +18,10 @@ import stolik from "./img/stolik.jpg";
 import tvTumba from "./img/tv-tumba.jpg";
 import "./App.css";
 import Categories from "./components/Categories";
+import ShowFullItem from "./components/ShowFullItem";
 
 class App extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -139,14 +141,24 @@ class App extends React.Component {
           price: 299.99,
         },
       ],
+      showFullItem: false,
+      fullItem: {}
     };
     this.state.currentItems = this.state.items
     this.addToOrder = this.addToOrder.bind(this);
     this.deleteOrder = this.deleteOrder.bind(this);
     this.chooseCategory = this.chooseCategory.bind(this);
+    this.onShowItem = this.onShowItem.bind(this);
+  
+
   }
   deleteOrder(id) {
     this.setState({ orders: this.state.orders.filter((el) => el.id !== id) });
+  }
+
+  onShowItem(item){
+    this.setState({fullItem: item});
+    this.setState({showFullItem: !this.state.showFullItem});    
   }
   chooseCategory(category) {
     if(category === "all"){
@@ -167,7 +179,8 @@ class App extends React.Component {
       <div className="wrapper">
         <Header orders={this.state.orders} onDelete={this.deleteOrder} />
         <Categories chooseCategory={this.chooseCategory}/>
-        <Items items={this.state.currentItems} onAdd={this.addToOrder} />
+        <Items items={this.state.currentItems} onAdd={this.addToOrder} onShowItem={this.onShowItem}/>
+         {this.state.showFullItem && <ShowFullItem item={this.state.fullItem} onAdd={this.addToOrder} onShowItem={this.onShowItem}/>}
         <Footer />
       </div>
     );
